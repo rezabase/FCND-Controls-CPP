@@ -14,7 +14,7 @@ First step is to convert the rotor-to-rotor length that is given to a prependicu
 length = L / (2 * sqrtf(2))
 
 
-'''c++
+
 
     VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
     {
@@ -36,7 +36,7 @@ length = L / (2 * sqrtf(2))
     return cmd;
     }
 
-'''
+
 
 
 Result:
