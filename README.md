@@ -17,6 +17,8 @@ Result:
 - PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
 
 
+
+
 ## Roll pitch control
 
 Requirements: The controller should use the acceleration and thrust commands, in addition to the vehicle attitude to output a body rate command. The controller should account for the non-linear transformation from local accelerations to body rates. Note that the drone's mass should be accounted for when calculating the target angles.
