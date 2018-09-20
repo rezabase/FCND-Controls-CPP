@@ -14,7 +14,7 @@ First step is to convert the rotor-to-rotor length that is given to a prependicu
 length = L / (2 * sqrtf(2))
 
 
-
+Below is the code for GenerateMotorCommands()
 
     VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
     {
@@ -32,11 +32,20 @@ length = L / (2 * sqrtf(2))
         cmd.desiredThrustsN[1] = (f_total - p_bar + q_bar - r_bar) / 4.f; // front right
         cmd.desiredThrustsN[2] = (f_total + p_bar - q_bar - r_bar) / 4.f; // rear left
         cmd.desiredThrustsN[3] = (f_total - p_bar - q_bar + r_bar) / 4.f; // rear right
-
-    return cmd;
+        return cmd;
     }
 
 
+And BodyRateControl() follows below:
+
+
+    V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
+    {
+        V3F momentCmd;
+        V3F I = V3F(Ixx, Iyy, Izz);
+        momentCmd = I * kpPQR * ( pqrCmd - pqr );
+        return momentCmd;
+    }
 
 
 Result:
