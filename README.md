@@ -48,6 +48,8 @@ And BodyRateControl() follows below:
     }
 
 
+in QuadControlParams.txt, kpPQR is (41.5, 41.5, 5)
+
 Result:
 
 - PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
@@ -61,6 +63,11 @@ Result:
 Requirements: The controller should use the acceleration and thrust commands, in addition to the vehicle attitude to output a body rate command. The controller should account for the non-linear transformation from local accelerations to body rates. Note that the drone's mass should be accounted for when calculating the target angles.
 
 
+
+
+Result:
+- PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
+- PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
 
 
 
