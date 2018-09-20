@@ -48,7 +48,7 @@ And BodyRateControl() follows below:
     }
 
 
-in QuadControlParams.txt, kpPQR is (41.5, 41.5, 5)
+In QuadControlParams.txt, kpPQR is (41.5, 41.5, 5)
 
 Result:
 
@@ -64,6 +64,7 @@ Requirements: The controller should use the acceleration and thrust commands, in
 
 
 
+In QuadControlParams.txt, kpBank = 13
 
 Result:
 - PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
