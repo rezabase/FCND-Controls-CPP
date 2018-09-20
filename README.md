@@ -13,8 +13,8 @@ Requirements: The controller should be a proportional controller on body rates t
 
 Result:
 
-PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
-PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
+- PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
+- PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
 
 
 ## Roll pitch control
