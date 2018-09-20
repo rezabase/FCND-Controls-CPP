@@ -3,16 +3,29 @@ Udacity Flying Car Controls Assignment
 Date: 24 Sept 2018
 
 
+## Intro
+
+This step was to tune the mass so that the quadcopter dowsnt fall to the ground. I tuned to the following number:
+
+Mass = 0.4855
+
 
 
 ## Body rate control
 
 Requirements: The controller should be a proportional controller on body rates to commanded moments. The controller should take into account the moments of inertia of the drone when calculating the commanded moments.
 
+There are two funcitons to configure in this step, GenerateMotorCommands() and BodyRateControl()
+
+### GenerateMotorCommands()
+
+This funciton calculates the thrust per rotor based on the total given thrust and momentum and saves the values in cmd.desiredThrustsN
+
 First step is to convert the rotor-to-rotor length that is given to a prependicular distance from the rotor to the axes using the formula below: 
 
 length = L / (2 * sqrtf(2))
 
+To calculate the thrust, I first calculated p_bar, q_bar by deviding the momentum per axis by the distance of the rotor to the exis. 
 
 Below is the code for GenerateMotorCommands()
 
@@ -24,9 +37,9 @@ Below is the code for GenerateMotorCommands()
         float length = L / (2.f * sqrtf(2.f)); //perpendicular distance to axes
     
         float f_total = collThrustCmd;  // (F_1 + F_2 + F_3 + F_4)
-        float p_bar = momentCmd.x / length; // (F_1 + F_4 - F_2 - F_3) = tau_x / length
-        float q_bar = momentCmd.y / length;  // (F_1 + F_2 - F_3 - F_4) = tau_y / length
-        float r_bar = -momentCmd.z / kappa; // -1 * tau_z / kappa  -- Reversing the direction becouse the z conrdinate upp is negative. 
+        float p_bar = momentCmd.x / length; // p_bar = tau_x / length
+        float q_bar = momentCmd.y / length;  // q_bar = tau_y / length
+        float r_bar = -momentCmd.z / kappa; // r_bar -1 * tau_z / kappa  -- Reversing the direction becouse the z conrdinate upp is negative. 
     
         cmd.desiredThrustsN[0] = (f_total + p_bar + q_bar + r_bar) / 4.f; // front left
         cmd.desiredThrustsN[1] = (f_total - p_bar + q_bar - r_bar) / 4.f; // front right
@@ -35,6 +48,8 @@ Below is the code for GenerateMotorCommands()
         return cmd;
     }
 
+
+### BodyRateControl()
 
 And BodyRateControl() follows below:
 
