@@ -5,7 +5,7 @@ Date: 24 Sept 2018
 
 
 
-## Implemented body rate control in C++
+## Body rate control
 
 Requirements: The controller should be a proportional controller on body rates to commanded moments. The controller should take into account the moments of inertia of the drone when calculating the commanded moments.
 
@@ -13,7 +13,7 @@ Requirements: The controller should be a proportional controller on body rates t
 
 
 
-## Implement roll pitch control in C++
+## Roll pitch control
 
 Requirements: The controller should use the acceleration and thrust commands, in addition to the vehicle attitude to output a body rate command. The controller should account for the non-linear transformation from local accelerations to body rates. Note that the drone's mass should be accounted for when calculating the target angles.
 
@@ -21,7 +21,7 @@ Requirements: The controller should use the acceleration and thrust commands, in
 
 
 
-## Implement altitude controller in C++
+## Altitude controller
 
 Requirements: The controller should use both the down position and the down velocity to command thrust. Ensure that the output value is indeed thrust (the drone's mass needs to be accounted for) and that the thrust includes the non-linear effects from non-zero roll/pitch angles.
 
@@ -30,7 +30,7 @@ Additionally, the C++ altitude controller should contain an integrator to handle
 
 
 
-## Implement lateral position control in C++
+## Lateral position control
 
 Requirements: The controller should use the local NE position and velocity to generate a commanded local acceleration.
 
@@ -38,7 +38,7 @@ Requirements: The controller should use the local NE position and velocity to ge
 
 
 
-## Implement yaw control in C++
+## Yaw control
 
 Requirements: The controller can be a linear/proportional heading controller to yaw rate commands (non-linear transformation not required).
 
@@ -47,7 +47,7 @@ Requirements: The controller can be a linear/proportional heading controller to 
 
 
 
-## Implement calculating the motor commands given commanded thrust and moments in C++
+## Calculating the motor commands given commanded thrust and moments
 
 Requirements: The thrust and moments should be converted to the appropriate 4 different desired thrust forces for the moments. Ensure that the dimensions of the drone are properly accounted for when calculating thrust from moments.
 
