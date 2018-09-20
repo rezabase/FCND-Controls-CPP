@@ -9,7 +9,18 @@ Date: 24 Sept 2018
 
 Requirements: The controller should be a proportional controller on body rates to commanded moments. The controller should take into account the moments of inertia of the drone when calculating the commanded moments.
 
+First step is to convert the rotor-to-rotor length that is given to a prependicular distance from the rotor to the axes using the formula below: 
 
+float length = L / (2.f * sqrtf(2.f)); //perpendicular distance to axes
+
+
+$$
+\begin{align}
+\tau_x &= (F_1 + F_4 - F_2 - F_3)l \\
+\tau_y &= (F_1 + F_2 - F_3 - F_4)l \\
+\tau_z &= \tau_1 + \tau_2 + \tau_3 + \tau_4
+\end{align}
+$$
 
 Result:
 
