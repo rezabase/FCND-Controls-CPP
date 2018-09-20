@@ -15,25 +15,26 @@ length = L / (2 * sqrtf(2))
 
 
 '''c++
-VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
-{
-    //L = full rotor to rotor distance that is defined in QuadControlParams.txt
-    // i need to calculate the perpendicular distance to axes that is:
-    
-    float length = L / (2.f * sqrtf(2.f)); //perpendicular distance to axes
-    
-    float f_total = collThrustCmd;  // (F_1 + F_2 + F_3 + F_4)
-    float p_bar = momentCmd.x / length; // (F_1 + F_4 - F_2 - F_3) = tau_x / length
-    float q_bar = momentCmd.y / length;  // (F_1 + F_2 - F_3 - F_4) = tau_y / length
-    float r_bar = -momentCmd.z / kappa; // -1 * tau_z / kappa  -- Reversing the direction becouse the z conrdinate upp is negative. 
-    
-    cmd.desiredThrustsN[0] = (f_total + p_bar + q_bar + r_bar) / 4.f; // front left
-    cmd.desiredThrustsN[1] = (f_total - p_bar + q_bar - r_bar) / 4.f; // front right
-    cmd.desiredThrustsN[2] = (f_total + p_bar - q_bar - r_bar) / 4.f; // rear left
-    cmd.desiredThrustsN[3] = (f_total - p_bar - q_bar + r_bar) / 4.f; // rear right
 
-  return cmd;
-}
+    VehicleCommand QuadControl::GenerateMotorCommands(float collThrustCmd, V3F momentCmd)
+    {
+        //L = full rotor to rotor distance that is defined in QuadControlParams.txt
+        // i need to calculate the perpendicular distance to axes that is:
+    
+        float length = L / (2.f * sqrtf(2.f)); //perpendicular distance to axes
+    
+        float f_total = collThrustCmd;  // (F_1 + F_2 + F_3 + F_4)
+        float p_bar = momentCmd.x / length; // (F_1 + F_4 - F_2 - F_3) = tau_x / length
+        float q_bar = momentCmd.y / length;  // (F_1 + F_2 - F_3 - F_4) = tau_y / length
+        float r_bar = -momentCmd.z / kappa; // -1 * tau_z / kappa  -- Reversing the direction becouse the z conrdinate upp is negative. 
+    
+        cmd.desiredThrustsN[0] = (f_total + p_bar + q_bar + r_bar) / 4.f; // front left
+        cmd.desiredThrustsN[1] = (f_total - p_bar + q_bar - r_bar) / 4.f; // front right
+        cmd.desiredThrustsN[2] = (f_total + p_bar - q_bar - r_bar) / 4.f; // rear left
+        cmd.desiredThrustsN[3] = (f_total - p_bar - q_bar + r_bar) / 4.f; // rear right
+
+    return cmd;
+    }
 
 '''
 
