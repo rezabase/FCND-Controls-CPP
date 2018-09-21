@@ -106,12 +106,54 @@ Result:
 Requirements: The controller should use the acceleration and thrust commands, in addition to the vehicle attitude to output a body rate command. The controller should account for the non-linear transformation from local accelerations to body rates. Note that the drone's mass should be accounted for when calculating the target angles.
 
 
+### RollPitchControl()
 
-In QuadControlParams.txt, kpBank = 13
+RollPitchControl() provides the desired acceleration in global cordinates, the estimated attitude and desired collective trhust. In return, we need to calculate and return the desired pith and roll rates of the vehacle. 
 
-Result:
-- PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
-- PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
+This is the second P controller that we need to tune, and it is a first order system. After implementing this function, the kpBank constant needs to be tuned. Below follows the result in this scenario.
+
+    kpBank = 13
+
+    Result:
+    - PASS: ABS(Quad.Roll) was less than 0.025000 for at least 0.750000 seconds
+    - PASS: ABS(Quad.Omega.X) was less than 2.500000 for at least 0.750000 seconds
+
+
+The calculations needed some conversion between local body frame and world cordinates. Below follows the implemented function.
+
+
+    V3F QuadControl::RollPitchControl(V3F accelCmd, Quaternion<float> attitude, float collThrustCmd)
+    {
+      V3F pqrCmd;
+      Mat3x3F R = attitude.RotationMatrix_IwrtB();
+      
+      if ( collThrustCmd > 0 )
+      {
+
+            float c = - collThrustCmd / mass;
+
+            // R13 (target X) & R23 (target Y)
+            float x_c_target = CONSTRAIN(accelCmd.x / c, -maxTiltAngle, maxTiltAngle);
+            float y_c_target = CONSTRAIN(accelCmd.y / c, -maxTiltAngle, maxTiltAngle);
+
+            float x = R(0,2); // R13 (actual X)
+            float x_err = x_c_target - x;
+            float x_p_term = kpBank * x_err;
+
+            float y = R(1,2); // R23 (Actual Y)
+            float y_err = y_c_target - y;
+            float y_p_term = kpBank * y_err;
+
+            pqrCmd.x = (R(1,0) * x_p_term - R(0,0) * y_p_term) / R(2,2);
+            pqrCmd.y = (R(1,1) * x_p_term - R(0,1) * y_p_term) / R(2,2);
+      }
+      else
+      {
+            pqrCmd.x = 0.0;
+            pqrCmd.y = 0.0;
+      }
+      return pqrCmd;
+    }
 
 
 
