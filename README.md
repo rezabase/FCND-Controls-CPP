@@ -14,12 +14,9 @@ This step was to tune the mass so that the quadcopter dowsnt fall to the ground.
 Mass = 0.4855
 
 
+## Calculating the motor commands given commanded thrust and moments
 
-## Body rate control
-
-Requirements: The controller should be a proportional controller on body rates to commanded moments. The controller should take into account the moments of inertia of the drone when calculating the commanded moments.
-
-There are two funcitons to configure in this step, GenerateMotorCommands() and BodyRateControl()
+Requirements: The thrust and moments should be converted to the appropriate 4 different desired thrust forces for the moments. Ensure that the dimensions of the drone are properly accounted for when calculating thrust from moments.
 
 ### GenerateMotorCommands()
 
@@ -70,7 +67,11 @@ Below follows the code:
         cmd.desiredThrustsN[3] = (f_total - f_p - f_q + f_r) / 4.f; // rear_right, CCW rotation
         return cmd;
     }
+    
 
+## Body rate control
+
+Requirements: The controller should be a proportional controller on body rates to commanded moments. The controller should take into account the moments of inertia of the drone when calculating the commanded moments.
 
 ### BodyRateControl()
 
@@ -278,10 +279,6 @@ After the funciton was implemented, constants kpYaw and the 3rd (z) component of
 
 
 
-## Calculating the motor commands given commanded thrust and moments
-
-Requirements: The thrust and moments should be converted to the appropriate 4 different desired thrust forces for the moments. Ensure that the dimensions of the drone are properly accounted for when calculating thrust from moments.
-
 
 
 
@@ -289,7 +286,18 @@ Requirements: The thrust and moments should be converted to the appropriate 4 di
 
 Requirements: Ensure that in each scenario the drone looks stable and performs the required task. Specifically check that the student's controller is able to handle the non-linearities of scenario 4 (all three drones in the scenario should be able to perform the required task with the same control gains used).
 
+### Scenario 4 result: 
 
+    PASS: ABS(Quad1.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
+    PASS: ABS(Quad2.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
+    PASS: ABS(Quad3.PosFollowErr) was less than 0.100000 for at least 1.500000 seconds
+    
+### Scenario 5 result:
 
+    Simulation #1 (../config/5_TrajectoryFollow.txt)
+    Simulation #2 (../config/5_TrajectoryFollow.txt)
+    PASS: ABS(Quad2.PosFollowErr) was less than 0.250000 for at least 3.000000 seconds
+    
 
+![alt text](/pics/scenario5.png "scenario 5 test")
 
