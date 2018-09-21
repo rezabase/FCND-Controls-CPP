@@ -244,8 +244,37 @@ After the implementation, the following constants must be tuned. With the follow
 
 Requirements: The controller can be a linear/proportional heading controller to yaw rate commands (non-linear transformation not required).
 
+### YawControl()
 
+And the last P controler to implement is the yaw control. It provides the current and commanded yaws and must calculate the desired yaw rate. 
 
+Below follows the implemented function: 
+
+    float QuadControl::YawControl(float yawCmd, float yaw)
+    {
+        float yawRateCmd=0;
+
+        if (yawCmd > 0)
+            yawCmd = fmodf(yawCmd, 2.f * F_PI);
+        else
+            yawCmd = fmodf(yawCmd, -2.f * F_PI);
+
+        float yaw_err = yawCmd - yaw ;
+
+        if ( yaw_err > F_PI )
+            yaw_err = yaw_err - 2.f * F_PI;
+
+        if ( yaw_err < -F_PI )
+            yaw_err = yaw_err + 2.f * F_PI;
+
+        yawRateCmd = kpYaw * yaw_err;
+        return yawRateCmd;
+    }
+
+After the funciton was implemented, constants kpYaw and the 3rd (z) component of kpPQR were tuned to the following values: 
+
+    kpYaw = 1
+    kpPQR = 41.5, 41.5, 6
 
 
 
