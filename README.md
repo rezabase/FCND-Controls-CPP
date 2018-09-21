@@ -165,14 +165,6 @@ Requirements: The controller should use both the down position and the down velo
 
 A second order PD controller that we need to implement and tune after the roll-pitch control. This function provides desired and current vertical positions in NED cordinates, feed-forward vertical acceleration and the timestep. It must calculate and return the collective thrust command. 
 
-After the implementation, the following constants must be tuned. With the following values, the tests passed. 
-
-    kpPosXY = 50
-    kpPosZ = 40
-    KiPosZ = 40
-    kpVelXY = 20
-    kpVelZ = 14
-
 Below follows a copy of the function: 
 
     float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
@@ -204,7 +196,47 @@ Below follows a copy of the function:
 
 Requirements: The controller should use the local NE position and velocity to generate a commanded local acceleration.
 
+### LateralPositionControl() 
 
+This function provides desired position and velocity, current position and velocity and the feed-forward acceleration. It calculates and returns desired horizontal acceleration. 
+
+Below follows the implementation: 
+
+    V3F QuadControl::LateralPositionControl(V3F posCmd, V3F velCmd, V3F pos, V3F vel, V3F accelCmdFF)
+    {
+          accelCmdFF.z = 0;
+          velCmd.z = 0;
+          posCmd.z = pos.z;
+
+          V3F accelCmd = accelCmdFF;
+          V3F pos_err = posCmd - pos ;
+
+          if (velCmd.mag() > maxSpeedXY) 
+          {
+                velCmd = velCmd.norm() * maxSpeedXY;
+          }
+
+          V3F vel_err = velCmd - vel ;
+
+          accelCmd = kpPosXY * pos_err + kpVelXY * vel_err + accelCmd;
+
+          if (accelCmd.mag() > maxAccelXY) 
+          {
+                accelCmd = accelCmd.norm() * maxAccelXY;
+          }
+
+          accelCmd.z = 0;
+          return accelCmd;
+    }
+
+
+After the implementation, the following constants must be tuned. With the following values, the tests passed. 
+
+    kpPosXY = 50
+    kpPosZ = 40
+    KiPosZ = 40
+    kpVelXY = 20
+    kpVelZ = 14
 
 
 
