@@ -161,7 +161,41 @@ The calculations needed some conversion between local body frame and world cordi
 
 Requirements: The controller should use both the down position and the down velocity to command thrust. Ensure that the output value is indeed thrust (the drone's mass needs to be accounted for) and that the thrust includes the non-linear effects from non-zero roll/pitch angles.
 
-Additionally, the C++ altitude controller should contain an integrator to handle the weight non-idealities presented in scenario 4.
+### AltitudeControl()
+
+A second order PD controller that we need to implement and tune after the roll-pitch control. This function provides desired and current vertical positions in NED cordinates, feed-forward vertical acceleration and the timestep. It must calculate and return the collective thrust command. 
+
+After the implementation, the following constants must be tuned. With the following values, the tests passed. 
+
+    kpPosXY = 50
+    kpPosZ = 40
+    KiPosZ = 40
+    kpVelXY = 20
+    kpVelZ = 14
+
+Below follows a copy of the function: 
+
+    float QuadControl::AltitudeControl(float posZCmd, float velZCmd, float posZ, float velZ, Quaternion<float> attitude, float accelZCmd, float dt)
+    {
+        Mat3x3F R = attitude.RotationMatrix_IwrtB();
+        float thrust = 0;
+
+        float error = posZCmd - posZ;
+        float error_dot = velZCmd - velZ;
+        integratedAltitudeError += error * dt;
+
+        float p_term = kpPosZ * error;
+        float i_term = KiPosZ * integratedAltitudeError;
+        float d_term = kpVelZ * error_dot;
+
+        float b_z = R(2,2);
+        float u1_bar = p_term + i_term + d_term + accelZCmd;
+        float acc = (u1_bar - CONST_GRAVITY) / b_z;
+        acc = CONSTRAIN(acc, - maxAscentRate / dt, maxDescentRate / dt);
+
+        thrust = - mass * acc ;
+        return thrust;
+    }
 
 
 
