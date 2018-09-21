@@ -4,7 +4,7 @@ Date: 24 Sept 2018
 
 
 
-![alt text](pics/controllers_overview.png "controllers")
+![alt text](/pics/controllers_overview.png "controllers")
 
 
 ## Intro
