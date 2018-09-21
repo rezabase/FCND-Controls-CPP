@@ -3,6 +3,10 @@ Udacity Flying Car Controls Assignment
 Date: 24 Sept 2018
 
 
+
+![alt text](pics/controllers_overview.png "controllers")
+
+
 ## Intro
 
 This step was to tune the mass so that the quadcopter dowsnt fall to the ground. I tuned to the following number:
