@@ -74,14 +74,19 @@ Below follows the code:
 
 ### BodyRateControl()
 
-And BodyRateControl() follows below:
+BodyRateControl() is a first order P controller that must be tuned first before any other controller. For this funciton, the desired and actual pqr values are given that we can use to calculate the pqr_error. Using the pqr_error, the moment of inertia and kpPQR constant, we can calculate and return the desired moment for each of the 3-axis. 
+
+After implementing this function, the kpPQR contact must be tuned. in this case, the tuned value is: 
+
+    kpPQR = 41.5, 41.5, 6
 
 
     V3F QuadControl::BodyRateControl(V3F pqrCmd, V3F pqr)
     {
         V3F momentCmd;
-        V3F I = V3F(Ixx, Iyy, Izz);
-        momentCmd = I * kpPQR * ( pqrCmd - pqr );
+        V3F I = V3F(Ixx, Iyy, Izz);     //Converting to V3F object
+        V3F pqr_error = pqrCmd - pqr;   //"desired body rates" - "current or estimated body rates"
+        momentCmd = I * kpPQR * ( pqr_error ); //return a V3F containing the desired moments for each of the 3 axes
         return momentCmd;
     }
 
